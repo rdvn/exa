@@ -99,8 +99,25 @@ pub fn painted_icon(file: &File, style: &FileStyle) -> String {
 
 fn icon(file: &File) -> char {
     let extensions = Box::new(FileExtensions);
-    if file.is_directory() { 
-        '\u{f115}' 
+    if file.is_directory() {
+        match &file.name[..] {
+            ".atom" => '\u{e764}',
+            ".git" => '\u{f1d3}',
+            ".github" => '\u{f408}',
+            ".rvm" => '\u{e21e}',
+            ".Trash" => '\u{f1f8}',
+            ".vscode" => '\u{e70c}',
+            "config" => '\u{e5fc}',
+            ".config" => '\u{e5fc}',
+            "bin" => '\u{e5fc}',
+            ".bin" => '\u{e5fc}',
+            "include" => '\u{e5fc}',
+            "folder" => '\u{f115}',
+            "hidden" => '\u{f023}',
+            "lib" => '\u{f121}',
+            "node_modules" => '\u{e718}',
+            _ => '\u{f115}',
+        }
     }
     else if let Some(icon) = extensions.icon_file(file) { icon }
     else { 

@@ -29,11 +29,10 @@ impl<'a> Render<'a> {
                 // Create a TextCell for the icon then append the text to it
                 let mut cell = TextCell::default();
                 let icon = painted_icon(&file, self.style);
-                cell.push(ANSIGenericString::from(icon), 2);
                 cell.append(name_cell.promote());
-                writeln!(w, "{}", ANSIStrings(&cell))?;
+                writeln!(w, "    {} {}",ANSIGenericString::from(icon), ANSIStrings(&cell))?;
             } else {
-                writeln!(w, "{}", ANSIStrings(&name_cell))?;
+                writeln!(w, "    {}", ANSIStrings(&name_cell))?;
             }
         }
 

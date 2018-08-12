@@ -283,7 +283,8 @@ impl<'a> Render<'a> {
 
             let mut name_cell = TextCell::default();
             if let Some(icon) = egg.icon {
-                name_cell.push(ANSIGenericString::from(icon), 2)
+                name_cell.push(ANSIGenericString::from(icon), 2);
+                name_cell.push(ANSIGenericString::from(" "), 1);
             }
             name_cell.append(self.style.for_file(&egg.file, self.colours)
                                   .with_link_paths()

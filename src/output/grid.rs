@@ -44,13 +44,13 @@ impl<'a> Render<'a> {
             let icon = if self.opts.icons { Some(painted_icon(&file, &self.style)) } else { None };
             let filename = self.style.for_file(file, self.colours).paint();
             let width = if self.opts.icons {
-                DisplayWidth::from(2) + filename.width() 
+                DisplayWidth::from(7) + filename.width()
             } else {
                 filename.width()
             };
 
             grid.add(tg::Cell {
-                contents:  format!("{icon}{filename}", icon=&icon.unwrap_or("".to_string()), filename=filename.strings().to_string()),
+                contents:  format!("    {icon} {filename}", icon=&icon.unwrap_or("".to_string()), filename=filename.strings().to_string()),
                 width:     *width,
             });
         }

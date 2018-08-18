@@ -35,7 +35,7 @@ impl FileExtensions {
 
     fn is_apple(&self, file: &File) -> bool {
         file.extension_is_one_of( &[
-            "apple", "ds_store", "localized",
+            "apple", "ds_store", "localized", "plist"
         ])
     }
 
@@ -54,9 +54,9 @@ impl FileExtensions {
 
     fn is_compressed(&self, file: &File) -> bool {
         file.extension_is_one_of( &[
-            "zip", "tar", "Z", "z", "gz", "bz2", "a", "ar", "7z",
-            "iso", "dmg", "tc", "rar", "par", "tgz", "xz", "txz",
-            "lzma", "deb", "rpm", "zst",
+            "7z", "a", "ar", "arj", "bz2", "cpio", "gz", "lrz", "lz", "lzma",
+            "lzo", "rar", "s7z", "sz", "tar", "tgz", "xz", "zip", "zipx",
+            "zoo", "zpaq", "zz", "z",
         ])
     }
     
@@ -108,13 +108,16 @@ impl FileExtensions {
         ])
     }
 
+    fn is_html(&self, file: &File) -> bool {
+        file.extension_is_one_of( &[
+            "html", "htm", "jhtm", "mht", "eml",
+        ])
+    }
+
     fn is_image(&self, file: &File) -> bool {
         file.extension_is_one_of( &[
-            "png", "jpeg", "jpg", "gif", "bmp", "tiff", "tif",
-            "ppm", "pgm", "pbm", "pnm", "webp", "raw", "arw",
-            "svg", "stl", "eps", "dvi", "ps", "cbr", "tiff",
-            "cbz", "xpm", "ico", "cr2", "orf", "nef", "webp",
-            "pxm", "ico",
+            "dmg", "iso", "bin", "nrg", "qcow", "sparseimage", "toast", "vcd",
+            "vmdk", "pkg",
         ])
     }
 
@@ -141,10 +144,23 @@ impl FileExtensions {
           "md", "license", "markdown", "mkd", "rdoc", "readme",
         ])
     }
-    
+
+    fn is_package(&self, file: &File) -> bool {
+        file.extension_is_one_of( &[
+          "deb", "rpm", "jad", "jar", "cab", "pak", "pk3", "vdf", "bsp",
+        ])
+    }
+
+    fn is_picture(&self, file: &File) -> bool {
+        file.extension_is_one_of( &[
+            "bmp", "tiff", "tif", "cdr", "gif", "ico", "jpeg", "jpg", "nth",
+            "png",  "xpm", "eps", "epsf", "drw", "svg", "raw",
+        ])
+    }
+
     fn is_ppt(&self, file: &File) -> bool {
         file.extension_is_one_of( &[
-          "ppt", "gslides", "pptx",
+          "pps", "ppt", "pptx", "ppts", "pptxm", "pptsm", "gslides",
         ])
     } 
     
@@ -176,8 +192,9 @@ impl FileExtensions {
     
     fn is_shell(&self, file: &File) -> bool {
         file.extension_is_one_of( &[
-            "shell", "bash", "bash_history", "bash_profile", "bashrc",
-            "fish", "sh", "zsh", "zsh-theme", "zshrc", "zsh_history",
+            "awk", "bash", "sed", "sh", "zsh", "ahk", "bash_history",
+            "bash_profile", "bashrc", "fish", "zsh-theme", "zshrc",
+            "zsh_history", "lesshst",
         ])
     }
     
@@ -195,8 +212,9 @@ impl FileExtensions {
 
     fn is_video(&self, file: &File) -> bool {
         file.extension_is_one_of( &[
-            "avi", "flv", "m2v", "mkv", "mov", "mp4", "mpeg",
-            "mpg", "ogm", "ogv", "vob", "wmv", "webm", "m2ts",
+            "avi", "divx", "ifo", "m2v", "m4v", "mkv", "mov", "mp4", "mpeg",
+            "mpg", "ogm", "rmvb", "sample", "wmv", "3g2", "3gp", "gp3", "webm",
+            "gp4", "asf", "flv", "ogv", "f4v", "vob"
         ])
     }
     
@@ -214,7 +232,7 @@ impl FileExtensions {
     
     fn is_xls(&self, file: &File) -> bool {
         file.extension_is_one_of( &[
-          "csv", "gsheet", "xlsx",
+          "ods", "xla", "xls", "xlsx", "xlsxm", "xltm", "xltx", "csv", "gsheet",
         ])
     }
     
@@ -232,8 +250,8 @@ impl FileExtensions {
        
     fn is_document(&self, file: &File) -> bool {
         file.extension_is_one_of( &[
-            "djvu", "doc", "docx", "dvi", "eml", "eps", "fotd",
-            "odp", "odt", "pdf", "ppt", "pptx", "rtf",
+            "djvu", "doc", "docx", "docm", "dvi", "eml", "eps", "fotd",
+            "odb", "odt", "pdf", "ppt", "pptx", "rtf", "ps",
             "xls", "xlsx",
         ])
     }
@@ -262,14 +280,41 @@ impl FileColours for FileExtensions {
         use ansi_term::Colour::*;
 
         Some(match file {
-            f if self.is_immediate(f)   => Yellow.bold().underline(),
-            f if self.is_image(f)       => Fixed(133).normal(),
-            f if self.is_video(f)       => Fixed(135).normal(),
+            f if self.is_android(f)     => Fixed(40).normal(),
+            f if self.is_apple(f)       => Fixed(239).normal(),
             f if self.is_music(f)       => Fixed(92).normal(),
             f if self.is_lossless(f)    => Fixed(93).normal(),
-            f if self.is_crypto(f)      => Fixed(109).normal(),
-            f if self.is_document(f)    => Fixed(105).normal(),
             f if self.is_compressed(f)  => Red.normal(),
+            f if self.is_crypto(f)      => Fixed(192).normal(),
+            f if self.is_css(f)         => Fixed(125).normal(),
+            f if self.is_doc(f)         => Fixed(111).normal(),
+            f if self.is_ebook(f)       => Fixed(141).normal(),
+            f if self.is_font(f)        => Fixed(66).normal(),
+            f if self.is_git(f)         => Fixed(197).normal(),
+            f if self.is_hs(f)          => Fixed(81).normal(),
+            f if self.is_html(f)        => Fixed(125).normal(),
+            f if self.is_image(f)       => Fixed(40).normal(),
+            f if self.is_java(f)        => Fixed(40).normal(),
+            f if self.is_json(f)        => Fixed(178).normal(),
+            f if self.is_jsx(f)         => Fixed(178).normal(),
+            f if self.is_md(f)          => Fixed(184).normal(),
+            f if self.is_package(f)     => Fixed(40).normal(),
+            f if self.is_picture(f)     => Fixed(133).normal(),
+            f if self.is_ppt(f)         => Fixed(166).normal(),
+            f if self.is_py(f)          => Fixed(41).normal(),
+            f if self.is_r(f)           => Fixed(49).normal(),
+            f if self.is_rb(f)          => Fixed(1).normal(),
+            f if self.is_rubydoc(f)     => Fixed(1).normal(),
+            f if self.is_shell(f)       => Fixed(172).normal(),
+            f if self.is_tex(f)         => Fixed(184).normal(),
+            f if self.is_video(f)       => Fixed(114).normal(),
+            f if self.is_vim(f)         => Fixed(1).normal(),
+            f if self.is_windows(f)     => Fixed(172).normal(),
+            f if self.is_xls(f)         => Fixed(112).normal(),
+            f if self.is_xml(f)         => Fixed(178).normal(),
+            f if self.is_yml(f)         => Fixed(178).normal(),
+            f if self.is_immediate(f)   => Yellow.bold().underline(),
+            f if self.is_document(f)    => Fixed(105).normal(),
             f if self.is_temp(f)        => Fixed(244).normal(),
             f if self.is_compiled(f)    => Fixed(137).normal(),
             _                           => return None,
@@ -295,11 +340,14 @@ impl FileIcon for FileExtensions {
             f if self.is_font(f)       => Icons::Font.value(),
             f if self.is_git(f)        => Icons::Git.value(),
             f if self.is_hs(f)         => Icons::Hs.value(),
+            f if self.is_html(f)       => Icons::Html.value(),
             f if self.is_image(f)      => Icons::Image.value(),
             f if self.is_java(f)       => Icons::Java.value(),
             f if self.is_json(f)       => Icons::Json.value(),
             f if self.is_jsx(f)        => Icons::Jsx.value(),
             f if self.is_md(f)         => Icons::Md.value(),
+            f if self.is_package(f)    => Icons::Package.value(),
+            f if self.is_picture(f)    => Icons::Picture.value(),
             f if self.is_ppt(f)        => Icons::Ppt.value(),
             f if self.is_py(f)         => Icons::Py.value(),
             f if self.is_r(f)          => Icons::R.value(),
